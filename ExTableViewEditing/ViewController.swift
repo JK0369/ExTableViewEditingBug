@@ -36,6 +36,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.register(MyTableViewCell.self, forCellReuseIdentifier: MyTableViewCell.id)
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -66,9 +67,21 @@ extension ViewController: UITableViewDataSource {
         items.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")
-        cell?.textLabel?.text = items[indexPath.row]
-        return cell!
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MyTableViewCell.id) as? MyTableViewCell else {
+            return UITableViewCell()
+        }
+        cell.textLabel?.text = items[indexPath.row]
+        cell.prepare(index: indexPath.row)
+        cell.delegate = self
+        return cell
+    }
+}
+
+extension ViewController: MyCellDelegate {
+    func didDisapperDeleteButton(index: Int) {
+        DispatchQueue.main.async {
+            self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .fade)
+        }
     }
 }
 
