@@ -8,26 +8,25 @@
 import UIKit
 
 protocol MyCellDelegate: AnyObject {
-    func didDisapperDeleteButton(index: Int)
+    func willDisapperDeleteButton(index: Int)
 }
 
 final class MyTableViewCell: UITableViewCell {
     static let id = "MyTableViewCell"
     
     // MARK: UI
-    
     override func layoutSubviews() {
         super.layoutSubviews()
         defer { lastMinX = frame.minX }
-        guard isDeleteButtonDisappeared, let index else { return }
-        delegate?.didDisapperDeleteButton(index: index)
+        guard deleteButtonDisappeared, let index else { return }
+        delegate?.willDisapperDeleteButton(index: index)
     }
 
-    // MARK: Initializer
+    // MARK: Properties
     weak var delegate: MyCellDelegate?
     private var index: Int?
     private var lastMinX = 0.0
-    private var isDeleteButtonDisappeared: Bool {
+    private var deleteButtonDisappeared: Bool {
         lastMinX < 0 && 0 <= frame.minX
     }
     

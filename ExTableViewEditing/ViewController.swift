@@ -78,7 +78,7 @@ extension ViewController: UITableViewDataSource {
 }
 
 extension ViewController: MyCellDelegate {
-    func didDisapperDeleteButton(index: Int) {
+    func willDisapperDeleteButton(index: Int) {
         DispatchQueue.main.async {
             self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .fade)
         }
